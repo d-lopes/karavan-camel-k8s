@@ -1,5 +1,9 @@
 # Karavan-Camel-K8S Example
 
+## Overview
+
+![routes](doc/img/karavan-routes.png)
+
 ## Prerequisits
 
 - run `sh setup.sh` to
