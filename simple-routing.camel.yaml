@@ -1,0 +1,71 @@
+- route:
+    id: channel-request-handler
+    description: >-
+      Handles incoming HTTP requests and routes them to external endpoints based
+      on channel ID
+    streamCache: false
+    from:
+      id: http-entry-point
+      description: Entry point for HTTP requests with channel parameter
+      uri: platform-http
+      parameters:
+        path: /channels/{channel}
+      steps:
+        - setProperty:
+            id: store-channel-id
+            description: Store the channel ID from URL path parameter for later use
+            name: channel
+            expression:
+              simple:
+                id: channel-extractor
+                expression: ${header.channel}
+        - setBody:
+            id: resolve-endpoint-url
+            description: Lookup the endpoint URL from properties file using channel ID
+            expression:
+              simple:
+                id: property-resolver
+                expression: >-
+                  ${properties:channels.${exchangeProperty.channel}.endpoints.chuck}
+        - log:
+            id: endpoint-logger
+            description: Log the resolved endpoint URL for tracking
+            message: "Resolved and routing to endpoint: ${body}"
+        - removeHeaders:
+            id: cleanup-http-headers
+            description: Remove Camel HTTP headers to enable forwarding to endpoint
+            pattern: CamelHttpPath|CamelHttpUri
+        - setHeader:
+            id: set-accept-encoding
+            description: Set "Accept-Encoding" Header
+            name: Accept-Encoding
+            expression:
+              constant:
+                id: constant-9fd6
+                expression: identity
+        - setHeader:
+            id: set-accept
+            description: Set "Accept" Header
+            name: Accept
+            expression:
+              constant:
+                id: constant-b648
+                expression: application/json
+        - toD:
+            id: external-service-caller
+            description: Make HTTP call to the resolved endpoint
+            uri: ${body}
+        - unmarshal:
+            id: json-unmarshaller
+            description: Convert response to JSON format
+            json:
+              id: json-7c96
+              library: Jackson
+              unmarshalType: java.util.Map
+        - transform:
+            id: response-transformer
+            description: Transform the API response
+            expression:
+              jq:
+                id: jq-f4c1
+                expression: .value
