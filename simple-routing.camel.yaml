@@ -6,7 +6,7 @@
       id: health-endpoint
       uri: platform-http
       parameters:
-        path: /q/health
+        path: /health
       steps:
         - setBody:
             id: health-response
@@ -22,11 +22,10 @@
                 id: constant-content-type
                 expression: application/json
 
+# Channel routing
 - route:
     id: channel-request-handler
-    description: >-
-      Handles incoming HTTP requests and routes them to external endpoints based
-      on channel ID
+    description: Handles incoming HTTP requests and routes them to external endpoints based on channel ID
     streamCache: false
     from:
       id: http-entry-point
@@ -35,6 +34,9 @@
       parameters:
         path: /channels/{channel}
       steps:
+        - log:
+            id: input-logger
+            message: "Received request for channel: ${header.channel}"
         - setProperty:
             id: store-channel-id
             description: Store the channel ID from URL path parameter for later use
@@ -43,6 +45,9 @@
               simple:
                 id: channel-extractor
                 expression: ${header.channel}
+        - log:
+            id: property-debug
+            message: "Looking up property: channels.${exchangeProperty.channel}.endpoints.chuck"
         - setBody:
             id: resolve-endpoint-url
             description: Lookup the endpoint URL from properties file using channel ID
@@ -54,7 +59,7 @@
         - log:
             id: endpoint-logger
             description: Log the resolved endpoint URL for tracking
-            message: "Resolved and routing to endpoint: ${body}"
+            message: "Resolved endpoint URL: ${body}"
         - removeHeaders:
             id: cleanup-http-headers
             description: Remove Camel HTTP headers to enable forwarding to endpoint
