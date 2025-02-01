@@ -6,7 +6,7 @@ This little demo uses the different categories of the Chuck Norris API (https://
 
 ![routes](doc/img/eip-message-flow.drawio.png)
 
-Behind the scenes the implementation uses Apache Camel (https://camel.apache.org/) and the Camel JBang (https://camel.apache.org/manual/camel-jbang.html). 
+Behind the scenes the implementation uses Apache Camel (https://camel.apache.org/) and the Camel JBang plugin (https://camel.apache.org/manual/camel-jbang.html). 
 
 ## Prerequisits
 
@@ -16,11 +16,13 @@ Behind the scenes the implementation uses Apache Camel (https://camel.apache.org
 
 ## quick local startup
 
+Run the following command from a terminal window:
+
 ```bash
 camel run *
 ```
 
-After a while (due to downloading of dependencies) you can access 
+After a while (due to downloading of dependencies) you will see output similar to the following in the terminal window:
 
 ```
 2025-02-01 10:58:44.458  INFO 32032 --- [           main] e.camel.impl.engine.AbstractCamelContext : Apache Camel 4.9.0 (channel-router) is starting
@@ -35,7 +37,7 @@ After a while (due to downloading of dependencies) you can access
 
 As soon as this happens, the local API is accessible underneath: http://localhost:8080/channels/{channel}
 
-Configured channels for categories of Chuck Norris jokes are as follows:
+Pre-configured channel mappings for categories of Chuck Norris jokes are as follows:
 
 | Channel | Category |
 | ------- | -------- |
@@ -59,7 +61,7 @@ docker inspect --format='{{json .State.Health}}' <container_id>
 
 ## Docker Compose
 
-Run the image with Docker like this:
+Run the image with Docker Compose like this:
 
 ```bash
 # Create .env file from the sample
@@ -77,6 +79,11 @@ docker-compose down
 
 ## k8s deployment
 
+Export the Camel route with to k8s like this:
+
 ```bash
 camel kubernetes export *
 ```
+
+Afterwards, the Camel application is available as Maven project underneath `.export`
+This Maven project can be used to generate corresponding k8s manifests with the tool Move2Kube (https://github.com/konveyor/move2kube)

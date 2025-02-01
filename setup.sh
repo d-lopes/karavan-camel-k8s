@@ -2,6 +2,9 @@
 
 ## Basics
 
+# install mise on MacOS
+brew install mise
+
 # install required tool versions
 mise install
 

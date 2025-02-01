@@ -1,3 +1,5 @@
 jbang 0.119.0
 kubectl 1.31.1
 minikube 1.34.0
+docker-slim 1.40.11
+docker-compose-v1 2.29.7
