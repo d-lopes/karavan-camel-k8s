@@ -1,3 +1,27 @@
+# Health check route
+- route:
+    id: health-check
+    description: Simple health check endpoint
+    from:
+      id: health-endpoint
+      uri: platform-http
+      parameters:
+        path: /q/health
+      steps:
+        - setBody:
+            id: health-response
+            expression:
+              constant:
+                id: constant-health
+                expression: '{"status":"UP"}'
+        - setHeader:
+            id: set-content-type
+            name: Content-Type
+            expression:
+              constant:
+                id: constant-content-type
+                expression: application/json
+
 - route:
     id: channel-request-handler
     description: >-

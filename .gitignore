@@ -1,3 +1,4 @@
 .export
 .camel-jbang
 .camel-jbang-run
+.env

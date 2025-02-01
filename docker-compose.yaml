@@ -1,0 +1,35 @@
+version: '3.8'
+
+services:
+  camel-router:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: camel-router
+    ports:
+      - "8080:8080"
+    env_file:
+      - .env
+    environment:
+      - EXAMPLE_ENV=${EXAMPLE_ENV:-custom_value}  # Uses value from env file or default
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/q/health"]
+      interval: 30s
+      timeout: 3s
+      retries: 3
+      start_period: 15s
+    volumes:
+      - ./routing.properties:/app/routing.properties:ro
+      - ./application.properties:/app/application.properties:ro
+    restart: unless-stopped
+    networks:
+      - camel-network
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+networks:
+  camel-network:
+    driver: bridge
