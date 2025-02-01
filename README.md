@@ -1,12 +1,12 @@
 # Karavan-Camel-K8S Example
 
-This little demo uses the different categories of the Chuck Norris API (https://api.chucknorris.io) to illustrate routing of context paths of a local API to a remote API. The local API takes a channel parameter and maps it to a known category of the remote API.
-
-Behind the scenes the implementation uses Apache Camel (https://camel.apache.org/) and the Camel JBang (https://camel.apache.org/manual/camel-jbang.html). 
-
 ## Overview
 
-![routes](doc/img/karavan-routes.png)
+This little demo uses the different categories of the Chuck Norris API (https://api.chucknorris.io) to illustrate routing of context paths of a local API to a remote API. The local API takes a channel parameter and maps it to a known category of the remote API.
+
+![routes](doc/img/eip-message-flow.drawio.png)
+
+Behind the scenes the implementation uses Apache Camel (https://camel.apache.org/) and the Camel JBang (https://camel.apache.org/manual/camel-jbang.html). 
 
 ## Prerequisits
 

@@ -1,4 +1,3 @@
-# Health check route
 - route:
     id: health-check
     description: Simple health check endpoint
@@ -13,7 +12,7 @@
             expression:
               constant:
                 id: constant-health
-                expression: '{"status":"UP"}'
+                expression: "{\"status\":\"UP\"}"
         - setHeader:
             id: set-content-type
             name: Content-Type
@@ -21,11 +20,11 @@
               constant:
                 id: constant-content-type
                 expression: application/json
-
-# Channel routing
 - route:
     id: channel-request-handler
-    description: Handles incoming HTTP requests and routes them to external endpoints based on channel ID
+    description: >-
+      Handles incoming HTTP requests and routes them to external endpoints based
+      on channel ID
     streamCache: false
     from:
       id: http-entry-point
@@ -47,7 +46,9 @@
                 expression: ${header.channel}
         - log:
             id: property-debug
-            message: "Looking up property: channels.${exchangeProperty.channel}.endpoints.chuck"
+            message: >-
+              Looking up property:
+              channels.${exchangeProperty.channel}.endpoints.chuck
         - setBody:
             id: resolve-endpoint-url
             description: Lookup the endpoint URL from properties file using channel ID
